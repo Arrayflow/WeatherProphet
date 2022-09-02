@@ -9,6 +9,7 @@ import java.lang.Exception
 import java.lang.RuntimeException
 
 object Repository {
+    //liveData()自动构建并返回一个livedata对象，其代码块中提供一个挂起函数的上下文
     fun searchPlaces(query: String) = liveData(Dispatchers.IO) {
         val result = try {
             val placeResponse = WeatherProphetNetwork.searchPlaces(query)
