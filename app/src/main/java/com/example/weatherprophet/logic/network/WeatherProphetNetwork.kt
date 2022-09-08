@@ -10,13 +10,21 @@ import kotlin.coroutines.resumeWithException
 import kotlin.coroutines.suspendCoroutine
 
 object WeatherProphetNetwork {
+
+    //封装WeatherService接口
+    private val weatherService = ServiceCreator.create(WeatherService::class.java)
+
+    suspend fun getDailyWeather(lng: String, lat: String) = weatherService.getDailyWeather(lng, lat).await()
+
+    suspend fun getRealtimeWeather(lng: String, lat: String) = weatherService.getRealtimeWeather(lng, lat).await()
+
+
     //ServiceCreator创建一个PlaceService的动态代理对象
     private val placeService = ServiceCreator.create<PlaceService>()
     //调用searchPlaces()方法，发起城市搜索的请求
     suspend fun searchPlaces(query: String) = placeService.searchPlaces(query).await()
 
-
-    /**************** 定义await函数:***********
+    /**************** 定义await函数: ***********
      * suspendCoroutine():必须在协程作用域或挂起函数中使用，接收一个Lambda表达式的参数，其中的参数列表为-
      * Continuation参数，并通过调用其resume()或resumeWithException()方法让协程恢复执行
      *
