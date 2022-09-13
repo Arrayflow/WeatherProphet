@@ -1,6 +1,7 @@
 package com.example.weatherprophet.logic
 
 import androidx.lifecycle.liveData
+import com.example.weatherprophet.logic.dao.PlaceDao
 import com.example.weatherprophet.logic.model.Place
 import com.example.weatherprophet.logic.model.Weather
 import com.example.weatherprophet.logic.network.WeatherProphetNetwork
@@ -41,8 +42,10 @@ object Repository {
                 Result.success(weather)
             } else {
                 Result.failure(
-                    RuntimeException("realtime response status is ${realtimeResponse.status}" +
-                        "daily response status is ${dailyResponse.status}")
+                    RuntimeException(
+                        "realtime response status is ${realtimeResponse.status}" +
+                                "daily response status is ${dailyResponse.status}"
+                    )
                 )
             }
         }
@@ -67,5 +70,11 @@ object Repository {
             }
             emit(result)
         }
+
+    fun savePlace(place: Place) = PlaceDao.savePlace(place)
+
+    fun getSavedPlace() = PlaceDao.getSavedPlace()
+
+    fun isPlaceSaved() = PlaceDao.isPlaceSaved()
 
 }
