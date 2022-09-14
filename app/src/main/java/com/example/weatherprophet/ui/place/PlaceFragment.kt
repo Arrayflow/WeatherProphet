@@ -1,5 +1,6 @@
 package com.example.weatherprophet.ui.place
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -12,9 +13,11 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.weatherprophet.MainActivity
 import com.example.weatherprophet.R
 import com.example.weatherprophet.WeatherProphetApplication
 import com.example.weatherprophet.databinding.FragmentPlaceBinding
+import com.example.weatherprophet.ui.weather.WeatherActivity
 
 class PlaceFragment : Fragment() {
     val viewModel by lazy {
@@ -30,8 +33,6 @@ class PlaceFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         binding = FragmentPlaceBinding.inflate(layoutInflater, container, false)
-//        val root = inflater.inflate(R.layout.fragment_place, container, false)
-//        recyclerView = root.findViewById(R.id.recycleView)
         val root = binding.root
         return root
     }
@@ -39,6 +40,20 @@ class PlaceFragment : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         val layoutManager = LinearLayoutManager(this.activity)
+
+        //首先判断当前fragment是否嵌入了MainActivity中，否则不跳转；之后从sp中将保存的搜索记录取出
+        if (this.activity is MainActivity && viewModel.isPlaceSaved()) {
+            val place = viewModel.getSavedPlace()
+            val intent = Intent(context, WeatherActivity::class.java).apply {
+                putExtra("location_lng", place.location.lng)
+                putExtra("location_lat", place.location.lat)
+                putExtra("place_name", place.name)
+            }
+            startActivity(intent)
+            activity?.finish()
+            return
+        }
+
         binding.recycleView.layoutManager = layoutManager
         adapter = PlaceAdapter(this, viewModel.placeList)
         binding.recycleView.adapter = adapter
@@ -65,6 +80,7 @@ class PlaceFragment : Fragment() {
                 Toast.makeText(activity, "未能查询到任何地点", Toast.LENGTH_SHORT).show()
                 result.exceptionOrNull()?.printStackTrace()
             }
+
         })
     }
 

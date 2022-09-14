@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.RecyclerView
 import com.example.weatherprophet.R
@@ -12,7 +13,7 @@ import com.example.weatherprophet.WeatherProphetApplication
 import com.example.weatherprophet.logic.model.Place
 import com.example.weatherprophet.ui.weather.WeatherActivity
 
-class PlaceAdapter(private val fragment: Fragment, private val placeList: List<Place>) :
+class PlaceAdapter(private val fragment: PlaceFragment, private val placeList: List<Place>) :
     RecyclerView.Adapter<PlaceAdapter.ViewHolder>() {
 
     inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
@@ -26,13 +27,27 @@ class PlaceAdapter(private val fragment: Fragment, private val placeList: List<P
         holder.itemView.setOnClickListener {
             val position = holder.bindingAdapterPosition
             val place = placeList[position]
-            val intent = Intent(parent.context, WeatherActivity::class.java).apply {
-                putExtra("location_lng", place.location.lng)
-                putExtra("location_lat", place.location.lat)
-                putExtra("place_name", place.name)
+
+            //加一层判断，当前的fragment是否在WeatherActivity中，如果在则不跳转
+            val activity = fragment.activity
+            if (activity is WeatherActivity) {
+                val drawerLayout = activity.findViewById(R.id.drawerLayout) as DrawerLayout
+                drawerLayout.closeDrawers()
+                activity.viewModel.locationLng = place.location.lng
+                activity.viewModel.locationLat = place.location.lat
+                activity.viewModel.placeName = place.name
+                activity.refreshWeather()
+            } else {
+                val intent = Intent(parent.context, WeatherActivity::class.java).apply {
+                    putExtra("location_lng", place.location.lng)
+                    putExtra("location_lat", place.location.lat)
+                    putExtra("place_name", place.name)
+                }
+                fragment.startActivity(intent)
+                fragment.activity?.finish()
             }
-            fragment.startActivity(intent)
-            fragment.activity?.finish()
+            //在RecycleView出现的阶段，点击后立即将这条记录保存到sp
+            fragment.viewModel.savePlace(place)
         }
         return holder
     }

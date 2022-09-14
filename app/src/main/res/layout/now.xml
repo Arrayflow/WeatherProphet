@@ -12,6 +12,14 @@
         android:fitsSystemWindows="true" >
 <!-- 添加上一行使整体UI不至于太靠上而占用原本状态栏的地方 -->
 
+        <Button
+            android:id="@+id/navBtn"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_marginStart="15dp"
+            android:layout_gravity="center_vertical"
+            android:background="@drawable/ic_home" />
+
         <TextView
             android:id="@+id/placeName"
             android:layout_width="wrap_content"
