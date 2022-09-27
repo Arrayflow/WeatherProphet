@@ -105,15 +105,16 @@ class WeatherActivity : AppCompatActivity() {
         val realtime = weather.realtime
         val daily = weather.daily
 
+        //填充now.xml布局
         val currentTempText = "${realtime.temperature.toInt()} ℃"
         binding.nowInclude.currentTemp.text = currentTempText
         binding.nowInclude.currentSky.text = getSky(realtime.skycon).info
 
         val currentPM25Text = "空气指数 ${realtime.airQuality.aqi.chn.toInt()}"
         binding.nowInclude.currentAQI.text = currentPM25Text
-
         binding.nowInclude.nowLayout.setBackgroundResource(getSky(realtime.skycon).bg)
 
+        //填充forecast.xml布局
         binding.forecastInclude.forecastLayout.removeAllViews()
         val days = daily.skycon.size
         for (i in 0 until days) {
@@ -135,7 +136,7 @@ class WeatherActivity : AppCompatActivity() {
             binding.forecastInclude.forecastLayout.addView(view)
         }
 
-        //填充life_index.xml
+        //填充life_index.xml布局
         val lifeIndex = daily.lifeIndex
         binding.lifeIndexInclude.coldRiskText.text = lifeIndex.coldRisk[0].desc
         binding.lifeIndexInclude.dressingText.text = lifeIndex.dressing[0].desc

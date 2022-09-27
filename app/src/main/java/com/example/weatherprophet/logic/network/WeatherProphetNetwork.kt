@@ -12,7 +12,7 @@ import kotlin.coroutines.suspendCoroutine
 object WeatherProphetNetwork {
 
     //封装WeatherService接口
-    private val weatherService = ServiceCreator.create(WeatherService::class.java)
+    private val weatherService = ServiceCreator.create<WeatherService>()
 
     suspend fun getDailyWeather(lng: String, lat: String) = weatherService.getDailyWeather(lng, lat).await()
 

@@ -3,10 +3,9 @@ plugins {
     id 'org.jetbrains.kotlin.android'
 }
 
+//加载local.properties
 def properties = new Properties()
-
 def inputStream = project.rootProject.file('local.properties').newDataInputStream()
-
 properties.load( inputStream )
 
 android {

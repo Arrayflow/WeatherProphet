@@ -2,6 +2,8 @@ package com.example.weatherprophet.logic.network
 
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import kotlin.properties.ReadWriteProperty
+import kotlin.reflect.KProperty
 
 object ServiceCreator {
     private const val BASE_URL = "https://api.caiyunapp.com/"
@@ -14,4 +16,5 @@ object ServiceCreator {
     fun <T> create(serviceClass: Class<T>): T = retrofit.create(serviceClass)
 
     inline fun <reified T> create(): T = create(T::class.java)
+
 }
