@@ -9,6 +9,9 @@ import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
 import kotlin.coroutines.suspendCoroutine
 
+/**
+ *
+ */
 object WeatherProphetNetwork {
 
     //封装WeatherService接口
